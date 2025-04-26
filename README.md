@@ -25,7 +25,7 @@ A modern web application for managing home loans and user profiles.
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/homefunders.git
+git clone https://github.com/kattayashchaitanya/homefunders.git
 cd homefunders
 ```
 
