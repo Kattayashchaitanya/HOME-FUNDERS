@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Home Funders</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-5px);
+        }
+
+        .table-responsive {
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .table th {
+            background: var(--light);
+            border-bottom: 2px solid var(--gray);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-approved {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .search-box {
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--light);
+            transition: var(--transition);
+        }
+
+        .search-box:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .filter-dropdown {
+            border-radius: 0.5rem;
+            border: 1px solid var(--light);
+            padding: 0.5rem 1rem;
+        }
+
+        .pagination {
+            border-radius: 0.5rem;
+        }
+
+        .page-link {
+            border: none;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .page-link:hover {
+            background: var(--light);
+            color: var(--primary-dark);
+        }
+
+        .page-item.active .page-link {
+            background: var(--primary);
+            color: var(--white);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="d-flex align-items-center text-decoration-none text-white">
+                <img src="logo.png" alt="Home Funders" height="40" class="me-2">
+                <span class="h5 mb-0">Home Funders</span>
+            </a>
+        </div>
+        <div class="sidebar-menu">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="admin.html">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#loans">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        Loan Management
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#users">
+                        <i class="fas fa-users"></i>
+                        User Management
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#settings">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                </li>
+                <li class="nav-item mt-4">
+                    <button class="nav-link text-danger" onclick="window.api.auth.logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 mb-0">Admin Dashboard</h1>
+            <div class="d-flex align-items-center">
+                <div class="search-box me-3">
+                    <i class="fas fa-search text-muted me-2"></i>
+                    <input type="text" class="border-0 bg-transparent" placeholder="Search...">
+                </div>
+                <select class="filter-dropdown">
+                    <option>All Status</option>
+                    <option>Pending</option>
+                    <option>Approved</option>
+                    <option>Rejected</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="text-muted mb-2">Total Loans</h6>
+                        <h3 class="mb-0" id="totalLoans">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="text-muted mb-2">Pending Loans</h6>
+                        <h3 class="mb-0" id="pendingLoans">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="text-muted mb-2">Total Users</h6>
+                        <h3 class="mb-0" id="totalUsers">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="text-muted mb-2">Active Users</h6>
+                        <h3 class="mb-0" id="activeUsers">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loan Management -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="h5 mb-0">Loan Applications</h2>
+                    <div class="d-flex">
+                        <button class="btn btn-primary me-2" onclick="exportLoans()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                        <button class="btn btn-success" onclick="refreshLoans()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loansTable">
+                            <!-- Loans will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- User Management -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="h5 mb-0">User Management</h2>
+                    <button class="btn btn-primary" onclick="addUser()">
+                        <i class="fas fa-plus"></i> Add User
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable">
+                            <!-- Users will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script>
+        // Check admin authentication
+        if (!window.api.auth.isAdmin()) {
+            window.location.href = 'signin.html';
+        }
+
+        // Load admin data
+        async function loadAdminData() {
+            try {
+                const [loansResult, usersResult] = await Promise.all([
+                    window.api.admin.getAllLoans(),
+                    window.api.admin.getAllUsers()
+                ]);
+
+                if (loansResult.success) {
+                    updateLoansTable(loansResult.data);
+                    updateLoanStats(loansResult.data);
+                }
+
+                if (usersResult.success) {
+                    updateUsersTable(usersResult.data);
+                    updateUserStats(usersResult.data);
+                }
+            } catch (error) {
+                console.error('Error loading admin data:', error);
+            }
+        }
+
+        function updateLoansTable(loans) {
+            const table = document.getElementById('loansTable');
+            table.innerHTML = '';
+
+            loans.forEach(loan => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${loan._id}</td>
+                    <td>${loan.user.name}</td>
+                    <td>${loan.loanType}</td>
+                    <td>₹${loan.amount.toLocaleString()}</td>
+                    <td><span class="status-badge status-${loan.status.toLowerCase()}">${loan.status}</span></td>
+                    <td>${new Date(loan.createdAt).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary action-btn me-2" onclick="viewLoan('${loan._id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-success action-btn me-2" onclick="approveLoan('${loan._id}')">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger action-btn" onclick="rejectLoan('${loan._id}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        function updateUsersTable(users) {
+            const table = document.getElementById('usersTable');
+            table.innerHTML = '';
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user._id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone || 'N/A'}</td>
+                    <td><span class="status-badge ${user.isActive ? 'status-approved' : 'status-rejected'}">${user.isActive ? 'Active' : 'Inactive'}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary action-btn me-2" onclick="viewUser('${user._id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning action-btn me-2" onclick="editUser('${user._id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger action-btn" onclick="deleteUser('${user._id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        function updateLoanStats(loans) {
+            document.getElementById('totalLoans').textContent = loans.length;
+            document.getElementById('pendingLoans').textContent = loans.filter(loan => loan.status === 'PENDING').length;
+        }
+
+        function updateUserStats(users) {
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('activeUsers').textContent = users.filter(user => user.isActive).length;
+        }
+
+        // Initialize admin dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAdminData();
+        });
+    </script>
+</body>
+</html> 

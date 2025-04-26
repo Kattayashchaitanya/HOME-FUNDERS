@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Monitor - Home Funders</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .monitor-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .monitor-header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .monitor-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .monitor-subtitle {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .metric-card {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .metric-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .metric-trend {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        .trend-down {
+            color: var(--danger);
+        }
+
+        .chart-container {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            height: 400px;
+        }
+
+        .alert-card {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .alert-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .alert-item {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: var(--light);
+        }
+
+        .alert-item.critical {
+            border-left: 4px solid var(--danger);
+        }
+
+        .alert-item.warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .alert-item.info {
+            border-left: 4px solid var(--primary);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge.healthy {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .status-badge.warning {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .status-badge.critical {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        @media (max-width: 768px) {
+            .monitor-container {
+                padding: 1rem;
+            }
+
+            .metric-value {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="monitor-container">
+        <div class="monitor-header">
+            <h1 class="monitor-title">Performance Monitor</h1>
+            <p class="monitor-subtitle">Real-time system metrics and performance monitoring</p>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-3 mb-4">
+                <div class="metric-card">
+                    <div class="metric-title">CPU Usage</div>
+                    <div class="metric-value" id="cpuUsage">0%</div>
+                    <div class="metric-trend" id="cpuTrend"></div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="metric-card">
+                    <div class="metric-title">Memory Usage</div>
+                    <div class="metric-value" id="memoryUsage">0%</div>
+                    <div class="metric-trend" id="memoryTrend"></div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="metric-card">
+                    <div class="metric-title">Response Time</div>
+                    <div class="metric-value" id="responseTime">0ms</div>
+                    <div class="metric-trend" id="responseTrend"></div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="metric-card">
+                    <div class="metric-title">Error Rate</div>
+                    <div class="metric-value" id="errorRate">0%</div>
+                    <div class="metric-trend" id="errorTrend"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="alert-card">
+                    <h3 class="alert-title">System Alerts</h3>
+                    <div id="alertsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="requestsChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="errorsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Initialize Socket.io connection
+        const socket = io();
+
+        // Chart configurations
+        const performanceChart = new Chart(
+            document.getElementById('performanceChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'CPU Usage',
+                            data: [],
+                            borderColor: '#2563eb',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Memory Usage',
+                            data: [],
+                            borderColor: '#10b981',
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            }
+        );
+
+        const requestsChart = new Chart(
+            document.getElementById('requestsChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Requests per Second',
+                        data: [],
+                        backgroundColor: '#3b82f6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            }
+        );
+
+        const errorsChart = new Chart(
+            document.getElementById('errorsChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Error Rate',
+                        data: [],
+                        borderColor: '#ef4444',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            }
+        );
+
+        // Socket event handlers
+        socket.on('metrics', (data) => {
+            // Update metric values
+            document.getElementById('cpuUsage').textContent = `${data.cpu}%`;
+            document.getElementById('memoryUsage').textContent = `${data.memory}%`;
+            document.getElementById('responseTime').textContent = `${data.responseTime}ms`;
+            document.getElementById('errorRate').textContent = `${data.errorRate}%`;
+
+            // Update trends
+            updateTrend('cpuTrend', data.cpu, data.prevCpu);
+            updateTrend('memoryTrend', data.memory, data.prevMemory);
+            updateTrend('responseTrend', data.responseTime, data.prevResponseTime);
+            updateTrend('errorTrend', data.errorRate, data.prevErrorRate);
+
+            // Update charts
+            updateChart(performanceChart, data.timestamp, [data.cpu, data.memory]);
+            updateChart(requestsChart, data.timestamp, [data.requests]);
+            updateChart(errorsChart, data.timestamp, [data.errorRate]);
+
+            // Check for alerts
+            checkAlerts(data);
+        });
+
+        // Helper functions
+        function updateTrend(elementId, current, previous) {
+            const element = document.getElementById(elementId);
+            const diff = current - previous;
+            const trend = diff > 0 ? '↑' : '↓';
+            const color = diff > 0 ? 'trend-up' : 'trend-down';
+            
+            element.innerHTML = `<span class="${color}">${trend} ${Math.abs(diff).toFixed(1)}</span>`;
+        }
+
+        function updateChart(chart, label, data) {
+            chart.data.labels.push(label);
+            data.forEach((value, index) => {
+                chart.data.datasets[index].data.push(value);
+            });
+
+            if (chart.data.labels.length > 10) {
+                chart.data.labels.shift();
+                chart.data.datasets.forEach(dataset => {
+                    dataset.data.shift();
+                });
+            }
+
+            chart.update();
+        }
+
+        function checkAlerts(data) {
+            const alertsList = document.getElementById('alertsList');
+            const alerts = [];
+
+            if (data.cpu > 80) {
+                alerts.push({
+                    type: 'critical',
+                    message: `High CPU Usage: ${data.cpu}%`
+                });
+            }
+
+            if (data.memory > 80) {
+                alerts.push({
+                    type: 'critical',
+                    message: `High Memory Usage: ${data.memory}%`
+                });
+            }
+
+            if (data.errorRate > 5) {
+                alerts.push({
+                    type: 'warning',
+                    message: `High Error Rate: ${data.errorRate}%`
+                });
+            }
+
+            if (data.responseTime > 1000) {
+                alerts.push({
+                    type: 'warning',
+                    message: `Slow Response Time: ${data.responseTime}ms`
+                });
+            }
+
+            alertsList.innerHTML = alerts.map(alert => `
+                <div class="alert-item ${alert.type}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>${alert.message}</span>
+                        <span class="status-badge ${alert.type}">${alert.type.toUpperCase()}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How It Works - HomeFunders</title>
+
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .slideUpFade {
+      animation: slideFadeIn 0.8s ease-out forwards;
+    }
+
+    @keyframes slideFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .icon-hover-grow:hover {
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+
+    .btn-glow:hover {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.7);
+      transition: box-shadow 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+
+  <!-- Navigation -->
+  <nav class="bg-white shadow-md py-4 px-6 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+    <div class="text-xl font-bold text-blue-600">Home Funders</div>
+    <ul class="flex space-x-6 text-sm md:text-base">
+      <li><a href="index.html" class="text-gray-700 hover:text-blue-600 transition duration-300">Home</a></li>
+      <li><a href="rural.html" class="text-gray-700 hover:text-blue-600 transition duration-300">Rural Loans</a></li>
+      <li><a href="urban.html" class="text-gray-700 hover:text-blue-600 transition duration-300">Urban Loans</a></li>
+      <li><a href="about.html" class="text-gray-700 hover:text-blue-600 transition duration-300">About</a></li>
+      <li><a href="contact.html" class="text-gray-700 hover:text-blue-600 transition duration-300">Contact</a></li>
+      <li id="auth-section">
+        <!-- Will be populated by JavaScript -->
+      </li>
+    </ul>
+  </nav>
+
+  <!-- How It Works Section -->
+  <section id="how" class="py-24 px-6 mt-16">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl font-extrabold text-center mb-4 slideUpFade">How It Works</h2>
+      <p class="text-lg text-center mb-16 slideUpFade text-gray-600 dark:text-gray-300">
+        Different journeys, same destination — see how it works for both <strong>Urban</strong> and <strong>Rural</strong> homestay hosts.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-12">
+        <!-- Urban Hosts -->
+        <div>
+          <h3 class="text-2xl font-bold text-blue-700 dark:text-blue-400 mb-6 slideUpFade">Urban Hosts</h3>
+          <div class="space-y-10 border-l-4 border-blue-500 dark:border-blue-400 pl-6">
+            <div data-aos="fade-up" class="flex items-start space-x-3 icon-hover-grow">
+              <i data-lucide="link" class="text-blue-600 dark:text-blue-300 w-6 h-6 mt-1"></i>
+              <div>
+                <h4 class="text-xl font-semibold">Connect Your Rental Platform</h4>
+                <p class="text-gray-700 dark:text-gray-400">Link your Airbnb or other platforms to import booking history.</p>
+              </div>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="100" class="flex items-start space-x-3 icon-hover-grow">
+              <i data-lucide="bar-chart-3" class="text-blue-600 dark:text-blue-300 w-6 h-6 mt-1"></i>
+              <div>
+                <h4 class="text-xl font-semibold">Smart AI Evaluation</h4>
+                <p class="text-gray-700 dark:text-gray-400">We assess your monthly earnings, guest reviews, and occupancy.</p>
+              </div>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="200" class="flex items-start space-x-3 icon-hover-grow">
+              <i data-lucide="file-check" class="text-blue-600 dark:text-blue-300 w-6 h-6 mt-1"></i>
+              <div>
+                <h4 class="text-xl font-semibold">Tailored Loan Offer</h4>
+                <p class="text-gray-700 dark:text-gray-400">Get an offer based on your income — fast and paperless.</p>
+              </div>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="300" class="flex items-start space-x-3 icon-hover-grow">
+              <i data-lucide="wallet" class="text-blue-600 dark:text-blue-300 w-6 h-6 mt-1"></i>
+              <div>
+                <h4 class="text-xl font-semibold">Receive Your Funds</h4>
+                <p class="text-gray-700 dark:text-gray-400">Loan is disbursed directly into your account in just days.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rural Hosts -->
+        <div>
+          <h3 class="text-2xl font-bold text-green-700 dark:text-green-400 mb-6 slideUpFade">Rural Hosts</h3>
+          <div class="space-y-10 border-l-4 border-green-500 dark:border-green-400 pl-6">
+            <div data-aos="fade-up" class="flex items-start space-x-3 icon-hover-grow">
+              <i data-lucide="upload" class="text-green-600 dark:text-green-300 w-6 h-6 mt-1"></i>
+              <div>
+                <h4 class="text-xl font-semibold">Submit Land or Booking Records</h4>
+                <p class="text-gray-700 dark:text-gray-400">Upload land proof, homestay permits, or booking logs from any platform.</p>
+              </div>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="100" class="flex items-start space-x-3 icon-hover-grow">
+              <i data-lucide="map-pin" class="text-green-600 dark:text-green-300 w-6 h-6 mt-1"></i>
+              <div>
+                <h4 class="text-xl font-semibold">Ground-Level & AI Assessment</h4>
+                <p class="text-gray-700 dark:text-gray-400">We evaluate the homestay's potential, location, and renovation scope.</p>
+              </div>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="200" class="flex items-start space-x-3 icon-hover-grow">
+              <i data-lucide="leaf" class="text-green-600 dark:text-green-300 w-6 h-6 mt-1"></i>
+              <div>
+                <h4 class="text-xl font-semibold">Loan Tailored to Growth Plans</h4>
+                <p class="text-gray-700 dark:text-gray-400">Get an offer that matches your seasonal income and upgrade goals.</p>
+              </div>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="300" class="flex items-start space-x-3 icon-hover-grow">
+              <i data-lucide="badge-dollar-sign" class="text-green-600 dark:text-green-300 w-6 h-6 mt-1"></i>
+              <div>
+                <h4 class="text-xl font-semibold">Quick Disbursal</h4>
+                <p class="text-gray-700 dark:text-gray-400">Funds delivered swiftly so you can expand your rural stay dream.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-20 text-center" data-aos="fade-up">
+        <p class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-300">
+          Whether you're in a bustling city or a peaceful village — we're here to help fund your homestay dreams.
+        </p>
+        <a href="signin.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full text-lg transition btn-glow">
+          Get Started Today
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-6 text-center">
+    <p>© 2025 Home Funders. Empowering the next generation of hosts.</p>
+  </footer>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+
+  <!-- AOS Library -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 1000 });
+  </script>
+
+  <!-- Auth Script -->
+  <script src="/js/api.js"></script>
+  <script>
+    // Update auth section based on login status
+    const updateAuthSection = async () => {
+      const authSection = document.getElementById('auth-section');
+      
+      if (window.api.auth.isAuthenticated()) {
+        const userResult = await window.api.auth.getCurrentUser();
+        if (userResult.success) {
+          authSection.innerHTML = `
+            <div class="flex items-center space-x-4">
+              <span class="text-gray-700">Welcome, ${userResult.data.name}</span>
+              <button onclick="window.api.auth.logout()" class="text-white bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition">
+                Logout
+              </button>
+            </div>
+          `;
+        }
+      } else {
+        authSection.innerHTML = `
+          <div class="flex space-x-4">
+            <a href="signin.html" class="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+              </svg>
+              Sign In
+            </a>
+            <a href="register.html" class="text-blue-600 border-2 border-blue-600 px-4 py-2 rounded hover:bg-blue-50 transition flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+              </svg>
+              Sign Up
+            </a>
+          </div>
+        `;
+      }
+    };
+
+    // Update auth section on page load
+    document.addEventListener('DOMContentLoaded', updateAuthSection);
+  </script>
+</body>
+</html> 

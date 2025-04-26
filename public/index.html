@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home Funders - Your Trusted Home Loan Partner</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary: #3b82f6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --light: #f3f4f6;
+      --dark: #1f2937;
+      --gray: #6b7280;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--white);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+      padding: 1rem 0;
+      transition: var(--transition);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .nav-link {
+      color: var(--dark);
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transition: var(--transition);
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      transform: scaleX(1);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: var(--white);
+      padding: 6rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon fill="white" points="0,100 100,0 100,100"/></svg>');
+      background-size: 100% 100%;
+      opacity: 0.1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 5rem 0;
+      background: var(--light);
+    }
+
+    .feature-card {
+      background: var(--white);
+      border-radius: 1rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      height: 100%;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--primary);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Loan Types Section */
+    .loan-types {
+      padding: 5rem 0;
+    }
+
+    .loan-card {
+      background: var(--white);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      height: 100%;
+    }
+
+    .loan-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .loan-image {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .loan-content {
+      padding: 1.5rem;
+    }
+
+    /* CTA Section */
+    .cta {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: var(--white);
+      padding: 5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon fill="white" points="0,100 100,0 100,100"/></svg>');
+      background-size: 100% 100%;
+      opacity: 0.1;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--dark);
+      color: var(--white);
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-link {
+      color: var(--gray);
+      text-decoration: none;
+      transition: var(--transition);
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-link:hover {
+      color: var(--white);
+      transform: translateX(5px);
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      transition: var(--transition);
+      margin-right: 1rem;
+    }
+
+    .social-link:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: var(--primary);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-light {
+      border: 2px solid var(--white);
+      color: var(--white);
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-outline-light:hover {
+      background: var(--white);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+
+      .feature-card {
+        margin-bottom: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Home Funders</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="loans.html">Loans</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="calculator.html">Calculator</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+          <li class="nav-item ms-lg-3">
+            <a class="btn btn-primary" href="signin.html">Sign In</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 hero-content animate-fadeInUp">
+          <h1 class="hero-title">Your Dream Home is Just a Loan Away</h1>
+          <p class="hero-subtitle">Get the best home loan rates and make your dream home a reality with our easy application process and quick approvals.</p>
+          <div class="d-flex gap-3">
+            <a href="loans.html" class="btn btn-primary">Apply Now</a>
+            <a href="calculator.html" class="btn btn-outline-light">Calculate EMI</a>
+          </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block animate-fadeInUp" style="animation-delay: 0.2s;">
+          <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" alt="Modern Home" class="img-fluid rounded-3 shadow-lg">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold">Why Choose Home Funders?</h2>
+        <p class="text-muted">We provide the best home loan solutions with competitive rates and excellent service</p>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-percentage"></i>
+            </div>
+            <h3>Low Interest Rates</h3>
+            <p class="text-muted">Get the most competitive interest rates in the market with flexible repayment options.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <h3>Quick Approval</h3>
+            <p class="text-muted">Fast and hassle-free loan approval process with minimal documentation required.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-headset"></i>
+            </div>
+            <h3>24/7 Support</h3>
+            <p class="text-muted">Round-the-clock customer support to assist you with all your loan-related queries.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loan Types Section -->
+  <section class="loan-types">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold">Our Loan Products</h2>
+        <p class="text-muted">Choose from our range of home loan products designed to meet your specific needs</p>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="loan-card">
+            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" alt="Urban Home Loan" class="loan-image w-100">
+            <div class="loan-content">
+              <h3>Urban Home Loan</h3>
+              <p class="text-muted">Perfect for buying or constructing a home in urban areas with special benefits for first-time buyers.</p>
+              <a href="urban.html" class="btn btn-primary">Learn More</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="loan-card">
+            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" alt="Rural Home Loan" class="loan-image w-100">
+            <div class="loan-content">
+              <h3>Rural Home Loan</h3>
+              <p class="text-muted">Specialized loan products for rural areas with flexible terms and government subsidies.</p>
+              <a href="rural.html" class="btn btn-primary">Learn More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-lg-8 cta-content">
+          <h2 class="display-5 fw-bold mb-4">Ready to Make Your Dream Home a Reality?</h2>
+          <p class="mb-4">Start your home loan journey with us today and get the best rates and service in the market.</p>
+          <a href="register.html" class="btn btn-primary btn-lg">Get Started Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <h3 class="footer-title">Home Funders</h3>
+          <p class="text-muted">Your trusted partner for home loans. We help you make your dream home a reality with our competitive rates and excellent service.</p>
+          <div class="d-flex mt-4">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4">
+          <h3 class="footer-title">Quick Links</h3>
+          <a href="#" class="footer-link">Home</a>
+          <a href="loans.html" class="footer-link">Loans</a>
+          <a href="calculator.html" class="footer-link">Calculator</a>
+          <a href="contact.html" class="footer-link">Contact</a>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4">
+          <h3 class="footer-title">Products</h3>
+          <a href="urban.html" class="footer-link">Urban Home Loan</a>
+          <a href="rural.html" class="footer-link">Rural Home Loan</a>
+          <a href="calculator.html" class="footer-link">EMI Calculator</a>
+          <a href="eligibility.html" class="footer-link">Eligibility Check</a>
+        </div>
+        <div class="col-lg-2 col-md-4 mb-4">
+          <h3 class="footer-title">Support</h3>
+          <a href="contact.html" class="footer-link">Contact Us</a>
+          <a href="faq.html" class="footer-link">FAQ</a>
+          <a href="privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="terms.html" class="footer-link">Terms of Service</a>
+        </div>
+      </div>
+      <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="mb-0 text-muted">&copy; 2024 Home Funders. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <p class="mb-0 text-muted">Designed with <i class="fas fa-heart text-danger"></i> by Home Funders</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Add smooth scrolling to all links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Add animation on scroll
+    const animateOnScroll = () => {
+      const elements = document.querySelectorAll('.animate-fadeInUp');
+      elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementBottom = element.getBoundingClientRect().bottom;
+        const isVisible = (elementTop < window.innerHeight) && (elementBottom >= 0);
+        if (isVisible) {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }
+      });
+    };
+
+    window.addEventListener('scroll', animateOnScroll);
+    window.addEventListener('load', animateOnScroll);
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.style.padding = '0.5rem 0';
+        navbar.style.boxShadow = 'var(--shadow-md)';
+      } else {
+        navbar.style.padding = '1rem 0';
+        navbar.style.boxShadow = 'var(--shadow-sm)';
+      }
+    });
+  </script>
+</body>
+</html> 

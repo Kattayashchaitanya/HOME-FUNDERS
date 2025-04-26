@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Calculator - Home Funders</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+            --gray: #6b7280;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calculator-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+
+        .calculator-container:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .calculator-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .calculator-tabs {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .calculator-tabs .nav-link {
+            color: var(--gray);
+            border: none;
+            padding: 1rem 2rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .calculator-tabs .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .calculator-tabs .nav-link:hover::after,
+        .calculator-tabs .nav-link.active::after {
+            transform: scaleX(1);
+        }
+
+        .calculator-tabs .nav-link.active {
+            color: var(--primary);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border-radius: 0.5rem;
+            border: 2px solid var(--light);
+            padding: 0.75rem 1rem;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-group-text {
+            background: var(--light);
+            border: 2px solid var(--light);
+            color: var(--gray);
+        }
+
+        .result-card {
+            background: var(--light);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+            transition: var(--transition);
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-top: 2rem;
+            background: var(--white);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .btn-calculate {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-calculate:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(0);
+        }
+
+        .table-responsive {
+            margin-top: 2rem;
+            background: var(--white);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .table th {
+            background: var(--light);
+            border-bottom: 2px solid var(--gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .info-icon {
+            color: var(--gray);
+            margin-left: 0.5rem;
+            cursor: help;
+        }
+
+        .tooltip {
+            font-size: 0.875rem;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .loading-spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 4px solid var(--light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .success-message {
+            color: var(--success);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .result-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1 class="h2 mb-3">Loan Calculator</h1>
+            <p class="text-muted">Calculate your EMI and check loan eligibility</p>
+        </div>
+
+        <ul class="nav nav-tabs calculator-tabs" id="calculatorTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="emi-tab" data-bs-toggle="tab" data-bs-target="#emi" type="button" role="tab">
+                    <i class="fas fa-calculator me-2"></i>EMI Calculator
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="eligibility-tab" data-bs-toggle="tab" data-bs-target="#eligibility" type="button" role="tab">
+                    <i class="fas fa-chart-line me-2"></i>Eligibility Calculator
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="calculatorTabContent">
+            <!-- EMI Calculator -->
+            <div class="tab-pane fade show active" id="emi" role="tabpanel">
+                <form id="emiCalculator">
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label for="loanAmount" class="form-label">
+                                Loan Amount (₹)
+                                <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the total loan amount you wish to borrow"></i>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" id="loanAmount" required min="0">
+                            </div>
+                            <div class="error-message" id="loanAmountError"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="interestRate" class="form-label">
+                                Interest Rate (%)
+                                <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the annual interest rate"></i>
+                            </label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="interestRate" step="0.01" required min="0">
+                                <span class="input-group-text">%</span>
+                            </div>
+                            <div class="error-message" id="interestRateError"></div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label for="loanTenure" class="form-label">
+                                Loan Tenure (Years)
+                                <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the loan repayment period in years"></i>
+                            </label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="loanTenure" required min="1" max="30">
+                                <span class="input-group-text">Years</span>
+                            </div>
+                            <div class="error-message" id="loanTenureError"></div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-calculate">
+                        <i class="fas fa-calculator me-2"></i>Calculate EMI
+                    </button>
+                </form>
+
+                <div class="loading" id="emiLoading">
+                    <div class="loading-spinner"></div>
+                    <p class="mt-3">Calculating your EMI...</p>
+                </div>
+
+                <div class="result-card" id="emiResult" style="display: none;">
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-4">
+                            <div class="result-value" id="monthlyEMI">₹0</div>
+                            <div class="result-label">Monthly EMI</div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="result-value" id="totalInterest">₹0</div>
+                            <div class="result-label">Total Interest</div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="result-value" id="totalPayment">₹0</div>
+                            <div class="result-label">Total Payment</div>
+                        </div>
+                    </div>
+                    <div class="chart-container" id="emiChart"></div>
+                    <div class="table-responsive">
+                        <table class="table" id="emiBreakdown">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Principal</th>
+                                    <th>Interest</th>
+                                    <th>Total</th>
+                                    <th>Remaining</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Eligibility Calculator -->
+            <div class="tab-pane fade" id="eligibility" role="tabpanel">
+                <form id="eligibilityCalculator">
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label for="monthlyIncome" class="form-label">
+                                Monthly Income (₹)
+                                <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter your monthly take-home income"></i>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" id="monthlyIncome" required min="0">
+                            </div>
+                            <div class="error-message" id="monthlyIncomeError"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="monthlyExpenses" class="form-label">
+                                Monthly Expenses (₹)
+                                <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter your total monthly expenses"></i>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" id="monthlyExpenses" required min="0">
+                            </div>
+                            <div class="error-message" id="monthlyExpensesError"></div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label for="existingEMIs" class="form-label">
+                                Existing EMIs (₹)
+                                <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter your current monthly EMI payments"></i>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" id="existingEMIs" required min="0">
+                            </div>
+                            <div class="error-message" id="existingEMIsError"></div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-calculate">
+                        <i class="fas fa-chart-line me-2"></i>Check Eligibility
+                    </button>
+                </form>
+
+                <div class="loading" id="eligibilityLoading">
+                    <div class="loading-spinner"></div>
+                    <p class="mt-3">Calculating your eligibility...</p>
+                </div>
+
+                <div class="result-card" id="eligibilityResult" style="display: none;">
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-4">
+                            <div class="result-value" id="disposableIncome">₹0</div>
+                            <div class="result-label">Disposable Income</div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="result-value" id="maxEMI">₹0</div>
+                            <div class="result-label">Maximum EMI</div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="result-value" id="maxLoanAmount">₹0</div>
+                            <div class="result-label">Maximum Loan Amount</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        let emiChart = null;
+
+        // Format currency
+        const formatCurrency = (amount) => {
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                maximumFractionDigits: 0
+            }).format(amount);
+        };
+
+        // Validate form inputs
+        const validateInput = (input, min = 0, max = null) => {
+            const value = parseFloat(input.value);
+            const errorElement = document.getElementById(`${input.id}Error`);
+            
+            if (isNaN(value) || value < min) {
+                errorElement.textContent = `Please enter a value greater than or equal to ${min}`;
+                errorElement.style.display = 'block';
+                return false;
+            }
+            
+            if (max !== null && value > max) {
+                errorElement.textContent = `Please enter a value less than or equal to ${max}`;
+                errorElement.style.display = 'block';
+                return false;
+            }
+            
+            errorElement.style.display = 'none';
+            return true;
+        };
+
+        // EMI Calculator
+        document.getElementById('emiCalculator').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loanAmount = document.getElementById('loanAmount');
+            const interestRate = document.getElementById('interestRate');
+            const loanTenure = document.getElementById('loanTenure');
+            
+            if (!validateInput(loanAmount) || !validateInput(interestRate) || !validateInput(loanTenure, 1, 30)) {
+                return;
+            }
+            
+            const loadingElement = document.getElementById('emiLoading');
+            const resultElement = document.getElementById('emiResult');
+            
+            loadingElement.style.display = 'block';
+            resultElement.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/calculator/emi', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        principal: parseFloat(loanAmount.value),
+                        rate: parseFloat(interestRate.value),
+                        tenure: parseInt(loanTenure.value) * 12
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.message);
+                }
+
+                const result = data.data;
+                
+                // Update results
+                document.getElementById('monthlyEMI').textContent = formatCurrency(result.emi);
+                document.getElementById('totalInterest').textContent = formatCurrency(result.totalInterest);
+                document.getElementById('totalPayment').textContent = formatCurrency(result.totalPayment);
+                
+                // Update breakdown table
+                const tbody = document.querySelector('#emiBreakdown tbody');
+                tbody.innerHTML = '';
+                
+                result.monthlyBreakdown.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.month}</td>
+                        <td>${formatCurrency(item.principal)}</td>
+                        <td>${formatCurrency(item.interest)}</td>
+                        <td>${formatCurrency(item.total)}</td>
+                        <td>${formatCurrency(item.remaining)}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+                // Destroy existing chart if it exists
+                if (emiChart) {
+                    emiChart.destroy();
+                }
+                
+                // Create new chart
+                const ctx = document.getElementById('emiChart').getContext('2d');
+                emiChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: result.monthlyBreakdown.map(item => `Month ${item.month}`),
+                        datasets: [{
+                            label: 'Principal',
+                            data: result.monthlyBreakdown.map(item => item.principal),
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            fill: true
+                        }, {
+                            label: 'Interest',
+                            data: result.monthlyBreakdown.map(item => item.interest),
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'EMI Breakdown Over Time',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 20
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Amount (₹)',
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                },
+                                ticks: {
+                                    callback: value => formatCurrency(value)
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Show results
+                loadingElement.style.display = 'none';
+                resultElement.style.display = 'block';
+                
+                // Scroll to results
+                resultElement.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                loadingElement.style.display = 'none';
+                alert('Error calculating EMI: ' + error.message);
+            }
+        });
+
+        // Eligibility Calculator
+        document.getElementById('eligibilityCalculator').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const monthlyIncome = document.getElementById('monthlyIncome');
+            const monthlyExpenses = document.getElementById('monthlyExpenses');
+            const existingEMIs = document.getElementById('existingEMIs');
+            
+            if (!validateInput(monthlyIncome) || !validateInput(monthlyExpenses) || !validateInput(existingEMIs)) {
+                return;
+            }
+            
+            const loadingElement = document.getElementById('eligibilityLoading');
+            const resultElement = document.getElementById('eligibilityResult');
+            
+            loadingElement.style.display = 'block';
+            resultElement.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/calculator/eligibility', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        monthlyIncome: parseFloat(monthlyIncome.value),
+                        monthlyExpenses: parseFloat(monthlyExpenses.value),
+                        existingEMIs: parseFloat(existingEMIs.value)
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.message);
+                }
+
+                const result = data.data;
+                
+                // Update results
+                document.getElementById('disposableIncome').textContent = formatCurrency(result.disposableIncome);
+                document.getElementById('maxEMI').textContent = formatCurrency(result.maxEMI);
+                document.getElementById('maxLoanAmount').textContent = formatCurrency(result.maxLoanAmount);
+                
+                // Show results
+                loadingElement.style.display = 'none';
+                resultElement.style.display = 'block';
+                
+                // Scroll to results
+                resultElement.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                loadingElement.style.display = 'none';
+                alert('Error calculating eligibility: ' + error.message);
+            }
+        });
+
+        // Add input validation
+        const numberInputs = document.querySelectorAll('input[type="number"]');
+        numberInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                validateInput(this);
+            });
+        });
+    </script>
+</body>
+</html> 

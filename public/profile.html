@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile - Home Funders</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #2c3e50;
+      --success-color: #2ecc71;
+      --danger-color: #e74c3c;
+      --light-color: #f8f9fa;
+      --dark-color: #343a40;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+    }
+
+    .profile-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      border: 4px solid var(--primary-color);
+    }
+
+    .profile-form {
+      margin-top: 2rem;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+      background-color: #357abd;
+      border-color: #357abd;
+    }
+
+    .alert {
+      display: none;
+      margin-top: 1rem;
+    }
+
+    .image-upload {
+      position: relative;
+      display: inline-block;
+    }
+
+    .image-upload input[type="file"] {
+      display: none;
+    }
+
+    .image-upload label {
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      background-color: var(--light-color);
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      transition: var(--transition);
+    }
+
+    .image-upload label:hover {
+      background-color: #e9ecef;
+    }
+
+    .password-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="profile-container">
+      <div class="profile-header">
+        <img id="profileImage" src="https://via.placeholder.com/150" alt="Profile Image" class="profile-image">
+        <div class="image-upload">
+          <input type="file" id="imageInput" accept="image/*">
+          <label for="imageInput">
+            <i class="fas fa-camera"></i> Change Profile Image
+          </label>
+        </div>
+      </div>
+
+      <form id="profileForm" class="profile-form">
+        <div class="alert alert-success" role="alert" id="successAlert">
+          Profile updated successfully!
+        </div>
+        <div class="alert alert-danger" role="alert" id="errorAlert">
+          An error occurred. Please try again.
+        </div>
+
+        <div class="mb-3">
+          <label for="name" class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone Number</label>
+          <input type="tel" class="form-control" id="phone" name="phone" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="address" class="form-label">Address</label>
+          <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+        </div>
+
+        <div class="password-section">
+          <h5>Change Password</h5>
+          <div class="mb-3">
+            <label for="currentPassword" class="form-label">Current Password</label>
+            <input type="password" class="form-control" id="currentPassword" name="currentPassword">
+          </div>
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input type="password" class="form-control" id="newPassword" name="newPassword">
+          </div>
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Fetch current user profile
+      fetch('/api/profile/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.user) {
+          document.getElementById('name').value = data.user.name;
+          document.getElementById('email').value = data.user.email;
+          document.getElementById('phone').value = data.user.phone;
+          document.getElementById('address').value = data.user.address;
+          if (data.user.profileImage) {
+            document.getElementById('profileImage').src = data.user.profileImage;
+          }
+        }
+      })
+      .catch(error => console.error('Error:', error));
+
+      // Handle profile image upload
+      document.getElementById('imageInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const formData = new FormData();
+          formData.append('image', file);
+
+          fetch('/api/profile/upload-image', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.imageUrl) {
+              document.getElementById('profileImage').src = data.imageUrl;
+              showAlert('success', 'Profile image updated successfully!');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            showAlert('error', 'Failed to upload image');
+          });
+        }
+      });
+
+      // Handle profile form submission
+      document.getElementById('profileForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          address: document.getElementById('address').value
+        };
+
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (currentPassword && newPassword && confirmPassword) {
+          if (newPassword !== confirmPassword) {
+            showAlert('error', 'New passwords do not match');
+            return;
+          }
+          formData.currentPassword = currentPassword;
+          formData.newPassword = newPassword;
+        }
+
+        fetch('/api/profile/update', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            showAlert('success', 'Profile updated successfully!');
+            // Clear password fields
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+          } else {
+            showAlert('error', data.message || 'Failed to update profile');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          showAlert('error', 'An error occurred while updating profile');
+        });
+      });
+
+      function showAlert(type, message) {
+        const alert = document.getElementById(`${type}Alert`);
+        alert.textContent = message;
+        alert.style.display = 'block';
+        setTimeout(() => {
+          alert.style.display = 'none';
+        }, 5000);
+      }
+    });
+  </script>
+</body>
+</html> 
