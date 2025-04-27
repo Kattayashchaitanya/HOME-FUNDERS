@@ -131,6 +131,62 @@
     </div>
   </div>
 
+  <div class="booking-section mt-4">
+    <h3>Book Document Verification Appointment</h3>
+    <div class="card">
+        <div class="card-body">
+            <form id="bookingForm">
+                <div class="mb-3">
+                    <label for="bookingDate" class="form-label">Select Date</label>
+                    <input type="date" class="form-control" id="bookingDate" min="{{currentDate}}">
+                </div>
+                <div class="mb-3">
+                    <label for="bookingTime" class="form-label">Available Time Slots</label>
+                    <select class="form-select" id="bookingTime" disabled>
+                        <option value="">Select a date first</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <h5>Documents for Verification</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="hostingProfile" id="doc1" checked>
+                        <label class="form-check-label" for="doc1">
+                            Airbnb/MMT Profile
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="bankStatements" id="doc2" checked>
+                        <label class="form-check-label" for="doc2">
+                            Bank Statements
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="idProof" id="doc3" checked>
+                        <label class="form-check-label" for="doc3">
+                            Aadhaar / PAN
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="propertyPapers" id="doc4" checked>
+                        <label class="form-check-label" for="doc4">
+                            Property Papers
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="bankDetails" id="doc5" checked>
+                        <label class="form-check-label" for="doc5">
+                            Bank Details
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" disabled id="bookSlotBtn">
+                    Book Verification Appointment
+                </button>
+            </form>
+        </div>
+    </div>
+  </div>
+
   <script>
     document.getElementById('urbanLoanForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -156,6 +212,87 @@
       } catch (error) {
         alert('Error submitting application: ' + error.message);
       }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const bookingDate = document.getElementById('bookingDate');
+        const bookingTime = document.getElementById('bookingTime');
+        const bookingForm = document.getElementById('bookingForm');
+        const bookSlotBtn = document.getElementById('bookSlotBtn');
+
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        bookingDate.min = today;
+
+        // Fetch available slots when date is selected
+        bookingDate.addEventListener('change', async function() {
+            const selectedDate = this.value;
+            if (!selectedDate) return;
+
+            try {
+                const response = await fetch(`/api/bookings/slots?type=urban&date=${selectedDate}&purpose=document_verification`);
+                const data = await response.json();
+
+                if (data.success) {
+                    bookingTime.innerHTML = '<option value="">Select a time slot</option>';
+                    data.data.forEach(slot => {
+                        const option = document.createElement('option');
+                        option.value = slot._id;
+                        option.textContent = slot.time;
+                        bookingTime.appendChild(option);
+                    });
+                    bookingTime.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error fetching slots:', error);
+                alert('Error fetching available slots');
+            }
+        });
+
+        // Enable book button when time is selected
+        bookingTime.addEventListener('change', function() {
+            bookSlotBtn.disabled = !this.value;
+        });
+
+        // Handle booking submission
+        bookingForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const slotId = bookingTime.value;
+            const loanId = document.getElementById('loanId').value; // Hidden input with loan ID
+
+            // Get selected documents
+            const selectedDocs = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            try {
+                const response = await fetch('/api/bookings/book', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        slotId,
+                        loanId,
+                        documents: selectedDocs
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Document verification appointment booked successfully! Check your email for confirmation.');
+                    // Optionally redirect to dashboard or show next steps
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert(data.error || 'Error booking appointment');
+                }
+            } catch (error) {
+                console.error('Error booking slot:', error);
+                alert('Error booking appointment');
+            }
+        });
     });
   </script>
 
