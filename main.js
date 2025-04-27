@@ -25,6 +25,7 @@ const loans = require('./routes/loanRoutes');
 const profile = require('./routes/profileRoutes');
 const admin = require('./routes/adminRoutes');
 const calculator = require('./routes/calculatorRoutes');
+const bookings = require('./routes/bookingRoutes');
 
 // Initialize express app
 const app = express();
@@ -97,6 +98,7 @@ app.use('/api/loans', loans);
 app.use('/api/profile', profile);
 app.use('/api/admin', admin);
 app.use('/api/calculator', calculator);
+app.use('/api/bookings', bookings);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
