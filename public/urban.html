@@ -7,41 +7,218 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
+    :root {
+      --primary: #1e40af;
+      --primary-dark: #1e3a8a;
+      --secondary: #3b82f6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --light: #f3f4f6;
+      --dark: #1f2937;
+      --gray: #6b7280;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
     body {
-      background: linear-gradient(to right, #1e3a8a, #1e40af, #1d4ed8);
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
       min-height: 100vh;
-      color: white;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
     }
+
     .navbar {
-      background-color: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(10px);
     }
+
     .card {
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: var(--shadow-lg);
+      border-radius: 1rem;
       margin-top: 2rem;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
     }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .form-control {
+      border-radius: 0.5rem;
+      border: 2px solid var(--light);
+      padding: 0.75rem 1rem;
+      transition: var(--transition);
+    }
+
     .form-control:focus {
-      border-color: #1d4ed8;
-      box-shadow: 0 0 0 0.2rem rgba(29, 78, 216, 0.25);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
     }
+
     .btn-primary {
-      background-color: #1d4ed8;
-      border-color: #1d4ed8;
+      background-color: var(--primary);
+      border-color: var(--primary);
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      transition: var(--transition);
     }
+
     .btn-primary:hover {
-      background-color: #1e40af;
-      border-color: #1e40af;
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
     }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
     .back-btn {
       position: absolute;
       top: 1rem;
       left: 1rem;
-      color: white;
+      color: var(--white);
       text-decoration: none;
+      transition: var(--transition);
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      backdrop-filter: blur(5px);
     }
+
     .back-btn:hover {
-      color: #e0e0e0;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-5px);
+    }
+
+    .icon-style {
+      color: var(--primary);
+      transition: var(--transition);
+    }
+
+    .icon-style:hover {
+      transform: scale(1.2);
+      color: var(--secondary);
+    }
+
+    input[type="file"] {
+      transition: var(--transition);
+    }
+
+    input[type="file"]:hover {
+      border-color: var(--secondary);
+      background-color: #eff6ff;
+    }
+
+    .form-check-input:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .form-check-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(30, 64, 175, 0.25);
+    }
+
+    .fade-in {
+      animation: fadeIn 1.2s ease-in-out both;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-in {
+      animation: slideIn 0.8s ease-out both;
+    }
+
+    @keyframes slideIn {
+      0% { opacity: 0; transform: translateX(-30px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .booking-section {
+      animation: fadeIn 1.2s ease-in-out 0.3s both;
+    }
+
+    .form-group {
+      animation: slideIn 0.8s ease-out both;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.2s; }
+    .form-group:nth-child(3) { animation-delay: 0.3s; }
+    .form-group:nth-child(4) { animation-delay: 0.4s; }
+    .form-group:nth-child(5) { animation-delay: 0.5s; }
+    .form-group:nth-child(6) { animation-delay: 0.6s; }
+    .form-group:nth-child(7) { animation-delay: 0.7s; }
+    .form-group:nth-child(8) { animation-delay: 0.8s; }
+
+    .alert {
+      border-radius: 0.5rem;
+      border: none;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .alert-success {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .alert-danger {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .loading-spinner {
+      width: 3rem;
+      height: 3rem;
+      border: 4px solid var(--light);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        margin: 1rem;
+      }
+
+      .back-btn {
+        top: 0.5rem;
+        left: 0.5rem;
+      }
     }
   </style>
 </head>
@@ -79,18 +256,18 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <div class="card bg-white text-dark p-4 mb-4">
+        <div class="card bg-white text-dark p-4 mb-4 fade-in">
           <h2 class="text-center mb-4">Urban Homestay Loan Application</h2>
           <form id="urbanLoanForm" enctype="multipart/form-data">
-            <div class="mb-3">
+            <div class="mb-3 form-group">
               <label class="form-label">Property Location</label>
               <input type="text" class="form-control" name="location" required>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 form-group">
               <label class="form-label">Loan Amount (₹)</label>
               <input type="number" class="form-control" name="amount" required>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 form-group">
               <label class="form-label">Property Type</label>
               <select class="form-select" name="propertyType" required>
                 <option value="">Select Property Type</option>
@@ -100,31 +277,31 @@
                 <option value="other">Other</option>
               </select>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 form-group">
               <label class="form-label">Airbnb/MMT Profile</label>
               <input type="file" class="form-control" name="hostingProfile" accept=".pdf,.jpg,.jpeg,.png" required>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 form-group">
               <label class="form-label">Bank Statements</label>
               <input type="file" class="form-control" name="bankStatements" accept=".pdf" required>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 form-group">
               <label class="form-label">Aadhaar / PAN</label>
               <input type="file" class="form-control" name="idProof" accept=".pdf,.jpg,.jpeg,.png" required>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 form-group">
               <label class="form-label">Property Papers</label>
               <input type="file" class="form-control" name="propertyPapers" accept=".pdf,.jpg,.jpeg,.png" required>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 form-group">
               <label class="form-label">Bank Details for Deposit</label>
               <input type="file" class="form-control" name="bankDetails" accept=".pdf,.jpg,.jpeg,.png" required>
             </div>
-            <div class="mb-3 form-check">
+            <div class="mb-3 form-check form-group">
               <input type="checkbox" class="form-check-input" id="terms" required>
               <label class="form-check-label" for="terms">I agree to the terms and conditions</label>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Submit Application</button>
+            <button type="submit" class="btn btn-primary w-100 pulse">Submit Application</button>
           </form>
         </div>
       </div>
@@ -132,21 +309,21 @@
   </div>
 
   <div class="booking-section mt-4">
-    <h3>Book Document Verification Appointment</h3>
+    <h3 class="text-center mb-4">Book Document Verification Appointment</h3>
     <div class="card">
         <div class="card-body">
             <form id="bookingForm">
-                <div class="mb-3">
+                <div class="mb-3 form-group">
                     <label for="bookingDate" class="form-label">Select Date</label>
                     <input type="date" class="form-control" id="bookingDate" min="{{currentDate}}">
                 </div>
-                <div class="mb-3">
+                <div class="mb-3 form-group">
                     <label for="bookingTime" class="form-label">Available Time Slots</label>
                     <select class="form-select" id="bookingTime" disabled>
                         <option value="">Select a date first</option>
                     </select>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3 form-group">
                     <h5>Documents for Verification</h5>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="hostingProfile" id="doc1" checked>
@@ -187,6 +364,7 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.getElementById('urbanLoanForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -258,44 +436,35 @@
         bookingForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const slotId = bookingTime.value;
-            const loanId = document.getElementById('loanId').value; // Hidden input with loan ID
-
-            // Get selected documents
             const selectedDocs = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
                 .map(checkbox => checkbox.value);
 
             try {
-                const response = await fetch('/api/bookings/book', {
+                const response = await fetch('/api/bookings/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     },
                     body: JSON.stringify({
-                        slotId,
-                        loanId,
-                        documents: selectedDocs
+                        slotId: bookingTime.value,
+                        documents: selectedDocs,
+                        type: 'urban',
+                        purpose: 'document_verification'
                     })
                 });
 
-                const data = await response.json();
-
-                if (data.success) {
-                    alert('Document verification appointment booked successfully! Check your email for confirmation.');
-                    // Optionally redirect to dashboard or show next steps
-                    window.location.href = 'dashboard.html';
+                if (response.ok) {
+                    alert('Appointment booked successfully!');
+                    window.location.reload();
                 } else {
-                    alert(data.error || 'Error booking appointment');
+                    throw new Error('Failed to book appointment');
                 }
             } catch (error) {
-                console.error('Error booking slot:', error);
-                alert('Error booking appointment');
+                alert('Error booking appointment: ' + error.message);
             }
         });
     });
   </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
